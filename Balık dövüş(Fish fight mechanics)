@@ -1,0 +1,37 @@
+using UnityEngine;
+
+public class BalikKilicSavasi : MonoBehaviour
+{
+    public int vurusSayisiGereken = 550; 
+    public GameObject karsiNesne; 
+    public int maksimumHitpoint = 10; 
+    public int vurusGucu = 110; 
+
+    private int vurusSayisi; 
+    private int hitpoint; 
+
+    void Start()
+    {
+        hitpoint = maksimumHitpoint; 
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Kilic")) 
+        {
+            vurusSayisi++; 
+
+            if (vurusSayisi >= vurusSayisiGereken)
+            {
+                karşıNesne.SetActive(false); 
+                hitpoint -= vurusGucu; 
+
+                if (hitpoint <= 0)
+                {
+                    
+                    Destroy(karşıNesne);
+                }
+            }
+        }
+    }
+}
