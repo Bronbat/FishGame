@@ -1,0 +1,61 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class fish : MonoBehaviour
+{
+    public float hareketHizi = 5f; 
+    public float ziplamaGucu = 5f; 
+    public float yercekimi = 10f; 
+    public Transform zeminKontrolNoktasi; 
+    public float zeminKontrolCapi = 0.1f; 
+    public LayerMask zeminLayer; 
+
+    private bool zemindeMi; 
+    private Vector3 hareketYonu; 
+    private CharacterController karakterController; 
+
+    void Start()
+    {
+        karakterController = GetComponent<CharacterController>();
+    }
+
+    
+    void Update()
+    {
+        float yatayHareket = Input.GetAxis("Horizontal"); 
+        float dikeyHareket = Input.GetAxis("Vertical");
+
+        hareketYonu = new Vector3(yatayHareket, 0f, dikeyHareket); 
+
+        
+        Vector3 kontrolNoktasi = new Vector3(zeminKontrolNoktasi.position.x, transform.position.y, zeminKontrolNoktasi.position.z);
+        zemindeMi = Physics.CheckSphere(kontrolNoktasi, zeminKontrolCapi, zeminLayer);
+
+        if (zemindeMi)
+        {
+            if (Input.GetButtonDown("Jump")) 
+            {
+                hareketYonu.y = ziplamaGucu;
+            }
+        }
+        else
+        {
+            hareketYonu.y -= yercekimi * Time.deltaTime; 
+        }
+
+        karakterController.Move(hareketYonu * hareketHizi * Time.deltaTime); 
+    }
+   void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        
+        if (!zemindeMi && !hit.gameObject.CompareTag("Player"))
+        {
+            hareketYonu = Vector3.zero;
+        }
+    }
+}
+}
+
+
+
